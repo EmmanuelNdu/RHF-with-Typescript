@@ -34,7 +34,7 @@ export const YouTubeForm = () => {
               },
             })}
           />
-          <p>{errors.username?.message}</p>
+          <p className="error">{errors.username?.message}</p>
         </div>
 
         <div>
@@ -50,7 +50,7 @@ export const YouTubeForm = () => {
               },
             })}
           />
-          <p>{errors.email?.message}</p>
+          <p className="error">{errors.email?.message}</p>
         </div>
         <div>
           <label htmlFor="channel">Channel</label>
