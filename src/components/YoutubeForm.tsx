@@ -10,7 +10,13 @@ type FormValues = {
 };
 
 export const YouTubeForm = () => {
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      username: "Batman",
+      email: "",
+      channel: "",
+    },
+  });
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
@@ -37,7 +43,7 @@ export const YouTubeForm = () => {
           <p className="error">{errors.username?.message}</p>
         </div>
 
-        <div>
+        <div className="form-control">
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -48,11 +54,26 @@ export const YouTubeForm = () => {
                   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                 message: "Invalid email format",
               },
+              validate: {
+                notAdmin: (fieldValue) => {
+                  return (
+                    fieldValue != "admin@example.com" ||
+                    "Enter a different email address"
+                  );
+                },
+                notBlackListed: (fieldValue) => {
+                  return (
+                    !fieldValue.endsWith("baddomain.com") ||
+                    "This domain is not supported"
+                  );
+                },
+              },
             })}
           />
           <p className="error">{errors.email?.message}</p>
         </div>
-        <div>
+
+        <div className="form-control">
           <label htmlFor="channel">Channel</label>
           <input
             type="text"
