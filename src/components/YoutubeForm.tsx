@@ -34,7 +34,7 @@ export const YouTubeForm = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
-  const { fields } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
     control,
   });
@@ -136,14 +136,22 @@ export const YouTubeForm = () => {
           <div>
             {fields.map((field, index) => {
               return (
-                <div className="form-control" key={fields.id}>
+                <div className="form-control" key={field.id}>
                   <input
                     type="text"
                     {...register(`phNumbers.${index}.number` as const)}
                   />
+                  {index > 0 && (
+                    <button type="button" onClick={() => remove(index)}>
+                      Remove
+                    </button>
+                  )}
                 </div>
               );
             })}
+            <button type="button" onClick={() => append({ number: "" })}>
+              Add phone Number
+            </button>
           </div>
         </div>
 
