@@ -36,3 +36,17 @@ border-radius: 4px;
   font-size: 12px;
   text-align: left;
 }
+
+.btn{
+  width: 400px;
+}
+
+.btn_submit {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.btn_get {
+  width: 200px;
+  margin-right: 10px;
+}

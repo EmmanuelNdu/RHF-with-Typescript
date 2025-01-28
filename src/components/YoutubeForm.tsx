@@ -36,7 +36,7 @@ export const YouTubeForm = () => {
       dob: new Date(),
     },
   });
-  const { register, control, handleSubmit, formState, watch } = form;
+  const { register, control, handleSubmit, formState, watch, getValues } = form;
   const { errors } = formState;
 
   const { fields, append, remove } = useFieldArray({
@@ -47,6 +47,17 @@ export const YouTubeForm = () => {
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted", data);
   };
+
+  const handleGetValues = () => {
+    console.log("Get values", getValues(["username", "channel"]));
+  };
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      console.log(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const watchUsername = watch(["username", "email"]);
   renderCount++;
@@ -160,7 +171,11 @@ export const YouTubeForm = () => {
                 </div>
               );
             })}
-            <button type="button" onClick={() => append({ number: "" })}>
+            <button
+              className="btn"
+              type="button"
+              onClick={() => append({ number: "" })}
+            >
               Add phone Number
             </button>
           </div>
@@ -198,7 +213,12 @@ export const YouTubeForm = () => {
           <p className="error">{errors.dob?.message}</p>
         </div>
 
-        <button type="submit">Submit</button>
+        <button className="btn_submit" type="submit">
+          Submit
+        </button>
+        <button className="btn_get" type="button" onClick={handleGetValues}>
+          Get Value
+        </button>
       </form>
       <DevTool control={control} />
     </div>
