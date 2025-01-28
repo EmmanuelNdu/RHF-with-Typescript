@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FieldErrors } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 let renderCount = 0;
@@ -36,8 +36,18 @@ export const YouTubeForm = () => {
       dob: new Date(),
     },
   });
-  const { register, control, handleSubmit, formState, watch, getValues } = form;
-  const { errors } = formState;
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState,
+    watch,
+    getValues,
+    setValue,
+  } = form;
+  const { errors, touchFields, dirtyFIelds, isDirty, isValid } = formState;
+
+  console.log({ touchFields, dirtyFIelds, isDirty, isValid });
 
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -48,8 +58,20 @@ export const YouTubeForm = () => {
     console.log("Form submitted", data);
   };
 
+  const onError = (errors: FieldErrors<FormValues>) => {
+    console.log("Form errors", errors);
+  };
+
   const handleGetValues = () => {
     console.log("Get values", getValues(["username", "channel"]));
+  };
+
+  const handleSetValue = () => {
+    setValue("username", "", {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   useEffect(() => {
@@ -65,7 +87,7 @@ export const YouTubeForm = () => {
     <div>
       <h1>YouTubeForm ({renderCount / 2}) </h1>
       <h2>Watched value:{watchUsername}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="form-control">
           <label htmlFor="username">Username</label>
           <input
@@ -128,7 +150,14 @@ export const YouTubeForm = () => {
 
         <div className="form-control">
           <label htmlFor="twitter">Twitter</label>
-          <input type="text" id="twitter" {...register("social.twitter")} />
+          <input
+            type="text"
+            id="twitter"
+            {...register("social.twitter", {
+              disabled: watch("channel") === "",
+              required: "Enter twitter profile",
+            })}
+          />
         </div>
 
         <div className="form-control">
@@ -213,11 +242,13 @@ export const YouTubeForm = () => {
           <p className="error">{errors.dob?.message}</p>
         </div>
 
-        <button className="btn_submit" type="submit">
-          Submit
-        </button>
-        <button className="btn_get" type="button" onClick={handleGetValues}>
+        <button disabled={!isDirty || !isValid}>Submit</button>
+        <button type="button" onClick={handleGetValues}>
           Get Value
+        </button>
+
+        <button className="btn_get" type="button" onClick={handleSetValue}>
+          Set Value
         </button>
       </form>
       <DevTool control={control} />
