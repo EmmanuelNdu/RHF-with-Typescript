@@ -44,10 +44,23 @@ export const YouTubeForm = () => {
     watch,
     getValues,
     setValue,
+    reset,
   } = form;
-  const { errors, touchedFields, dirtyFields, isDirty, isValid } = formState;
+  const {
+    errors,
+    touchedFields,
+    dirtyFields,
+    isDirty,
+    isValid,
+    isSubmitted,
+    isSubmitting,
+    isSubmitSuccessful,
+    submitCount,
+  } = formState;
 
-  console.log({ touchedFields, dirtyFields, isDirty, isValid });
+  console.log({ isSubmitting, isSubmitted, isSubmitSuccessful, submitCount });
+
+  // console.log({ touchedFields, dirtyFields, isDirty, isValid });
 
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -75,11 +88,17 @@ export const YouTubeForm = () => {
   };
 
   useEffect(() => {
-    const subscription = watch((value) => {
-      console.log(value);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  // useEffect(() => {
+  //   const subscription = watch((value) => {
+  //     console.log(value);
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   const watchUsername = watch(["username", "email"]);
   renderCount++;
@@ -126,6 +145,13 @@ export const YouTubeForm = () => {
                     !fieldValue.endsWith("baddomain.com") ||
                     "This domain is not supported"
                   );
+                },
+                emailAvailable: async (fieldValue) => {
+                  const response = await fetch(
+                    `https://jsonplaceholder.typicode.com/users?email:Sincere@april.biz=${fieldValue}`
+                  );
+                  const data = await response.json();
+                  return data.length == 0 || "Email already exist";
                 },
               },
             })}
@@ -242,7 +268,11 @@ export const YouTubeForm = () => {
           <p className="error">{errors.dob?.message}</p>
         </div>
 
-        <button disabled={!isDirty || !isValid}>Submit</button>
+        {/* <button disabled={!isDirty || !isSubmitting}>Submit</button> */}
+        <button>Submit</button>
+        <button type="button" onClick={() => reset()}>
+          Reset
+        </button>
         <button type="button" onClick={handleGetValues}>
           Get Value
         </button>
