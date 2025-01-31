@@ -160,7 +160,7 @@ export const YouTubeForm = () => {
         </div>
 
         <div className="form-control">
-          <label htmlFor="channel">Channels</label>
+          <label htmlFor="channel">Channel</label>
           <input
             type="text"
             id="channel"
