@@ -23,7 +23,7 @@ type FormValues = {
 export const YouTubeForm = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      username: " Batman ",
+      username: " Batmans ",
       email: "",
       channel: "",
       social: {
