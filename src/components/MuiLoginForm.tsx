@@ -10,7 +10,7 @@ type FormValues = {
 export const MuiLoginForm = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      email: "kfkfjf",
+      email: "",
       password: "",
     },
   });
