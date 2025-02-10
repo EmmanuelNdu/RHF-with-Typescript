@@ -11,7 +11,7 @@ export const MuiLoginForm = () => {
   const form = useForm<FormValues>({
     defaultValues: {
       email: "",
-      password: "jhjdj",
+      password: "",
     },
   });
 
